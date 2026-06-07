@@ -27,6 +27,23 @@ navLinks.querySelectorAll('a').forEach(link => {
 // ===== REVEAL ON SCROLL =====
 const reveals = document.querySelectorAll('.reveal');
 
+// Trigger reveals already in viewport immediately (fixes headless/no-JS-scroll)
+requestAnimationFrame(() => {
+  reveals.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add('visible');
+      el.querySelectorAll('.transform__card, .offer__card, .review__card, .faq__item').forEach((child, i) => {
+        setTimeout(() => {
+          child.style.opacity = '1';
+          child.style.transform = 'none';
+          child.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        }, i * 80);
+      });
+    }
+  });
+});
+
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
